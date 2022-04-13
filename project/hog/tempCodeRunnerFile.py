@@ -1,0 +1,1 @@
+print(more_boar(21, 43))
