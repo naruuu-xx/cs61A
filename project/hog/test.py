@@ -180,10 +180,44 @@ def echo(s0, s1):
 # print(hog.play(strat0, strat1, dice=make_test_dice(4, 2, 6), goal=15, say=echo))
 # print(hog.play(always_roll(1), always_roll(1), dice=make_test_dice(8, 2), goal=20, say=echo))
 
-def echo_0(s0, s1):
-    print('*', s0)
-    return echo_0
-def echo_1(s0, s1):
-    print('**', s1)
-    return echo_1
-print(hog.play(always_roll(1), always_roll(1), dice=make_test_dice(2), goal=3, say=both(echo_0, echo_1)))
+# def echo_0(s0, s1):
+#     print('*', s0)
+#     return echo_0
+# def echo_1(s0, s1):
+#     print('**', s1)
+#     return echo_1
+# print(hog.play(always_roll(1), always_roll(1), dice=make_test_dice(2), goal=3, say=both(echo_0, echo_1)))
+def announce_highest(who, last_score=0, running_high=0):
+    """Return a commentary function that announces when WHO's score
+    increases by more than ever before in the game.
+   
+    NOTE: the following game is not possible under the rules, it's just
+    an example for the sake of the doctest
+
+
+    >>> f0 = announce_highest(1) # Only announce Player 1 score gains
+    >>> f1 = f0(12, 0)
+    >>> f2 = f1(12, 9)
+    Player 1 has reached a new maximum point gain. 9 point(s)!
+    >>> f3 = f2(20, 9)
+    >>> f4 = f3(20, 30)
+    Player 1 has reached a new maximum point gain. 21 point(s)!
+    >>> f5 = f4(20, 47) # Player 1 gets 17 points; not enough for a new high
+    >>> f6 = f5(21, 47)
+    >>> f7 = f6(21, 77)
+    Player 1 has reached a new maximum point gain. 30 point(s)!
+    """
+    assert who == 0 or who == 1, 'The who argument should indicate a player.'
+    # BEGIN PROBLEM 7
+    "*** YOUR CODE HERE ***"
+    def say(score0, score1):
+        score = score0 if who == 0 else score1
+        high_number = running_high
+        if score > last_score:
+            temp = score - last_score
+            if temp > high_number:
+                high_number = temp
+                print ('Player',who,'has reached a new maximum point gain.', high_number, 'point(s)!')
+        return announce_highest(who, score, high_number)
+    return say
+    # END PROBLEM 7
