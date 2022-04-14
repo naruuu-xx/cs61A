@@ -187,37 +187,71 @@ def echo(s0, s1):
 #     print('**', s1)
 #     return echo_1
 # print(hog.play(always_roll(1), always_roll(1), dice=make_test_dice(2), goal=3, say=both(echo_0, echo_1)))
-def announce_highest(who, last_score=0, running_high=0):
-    """Return a commentary function that announces when WHO's score
-    increases by more than ever before in the game.
+# def announce_highest(who, last_score=0, running_high=0):
+#     """Return a commentary function that announces when WHO's score
+#     increases by more than ever before in the game.
    
-    NOTE: the following game is not possible under the rules, it's just
-    an example for the sake of the doctest
+#     NOTE: the following game is not possible under the rules, it's just
+#     an example for the sake of the doctest
 
 
-    >>> f0 = announce_highest(1) # Only announce Player 1 score gains
-    >>> f1 = f0(12, 0)
-    >>> f2 = f1(12, 9)
-    Player 1 has reached a new maximum point gain. 9 point(s)!
-    >>> f3 = f2(20, 9)
-    >>> f4 = f3(20, 30)
-    Player 1 has reached a new maximum point gain. 21 point(s)!
-    >>> f5 = f4(20, 47) # Player 1 gets 17 points; not enough for a new high
-    >>> f6 = f5(21, 47)
-    >>> f7 = f6(21, 77)
-    Player 1 has reached a new maximum point gain. 30 point(s)!
+    # >>> f0 = announce_highest(1) # Only announce Player 1 score gains
+    # >>> f1 = f0(12, 0)
+    # >>> f2 = f1(12, 9)
+    # Player 1 has reached a new maximum point gain. 9 point(s)!
+    # >>> f3 = f2(20, 9)
+    # >>> f4 = f3(20, 30)
+    # Player 1 has reached a new maximum point gain. 21 point(s)!
+    # >>> f5 = f4(20, 47) # Player 1 gets 17 points; not enough for a new high
+    # >>> f6 = f5(21, 47)
+    # >>> f7 = f6(21, 77)
+    # Player 1 has reached a new maximum point gain. 30 point(s)!
+    # """
+    # assert who == 0 or who == 1, 'The who argument should indicate a player.'
+    # # BEGIN PROBLEM 7
+    # "*** YOUR CODE HERE ***"
+    # def say(score0, score1):
+    #     score = score0 if who == 0 else score1
+    #     high_number = running_high
+    #     if score > last_score:
+    #         temp = score - last_score
+    #         if temp > high_number:
+    #             high_number = temp
+    #             print ('Player',who,'has reached a new maximum point gain.', high_number, 'point(s)!')
+    #     return announce_highest(who, score, high_number)
+    # return say
+    # # END PROBLEM 7
+
+def make_averaged(original_function, trials_count=1000):
+    """Return a function that returns the average value of ORIGINAL_FUNCTION
+    when called.
+
+    To implement this function, you will have to use *args syntax, a new Python
+    feature introduced in this project.  See the project description.
+
+    >>> dice = make_test_dice(4, 2, 5, 1)
+    >>> averaged_dice = make_averaged(roll_dice, 1000)
+    >>> averaged_dice(1, dice)
+    3.0
     """
-    assert who == 0 or who == 1, 'The who argument should indicate a player.'
-    # BEGIN PROBLEM 7
+    # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
-    def say(score0, score1):
-        score = score0 if who == 0 else score1
-        high_number = running_high
-        if score > last_score:
-            temp = score - last_score
-            if temp > high_number:
-                high_number = temp
-                print ('Player',who,'has reached a new maximum point gain.', high_number, 'point(s)!')
-        return announce_highest(who, score, high_number)
-    return say
-    # END PROBLEM 7
+    def f(*args):
+        ans = 0
+        for i in range (trials_count):
+            ans += original_function(*args)
+        return ans / trials_count
+    return f
+
+
+# from hog import *
+# dice = make_test_dice(3, 1, 5, 6)
+# averaged_dice = make_averaged(dice, 1000)
+# print(averaged_dice())>>> dice = make_test_dice(3, 1, 5, 6)
+# averaged_roll_dice = make_averaged(roll_dice, 1000)
+#  # Enter a float (e.g. 1.0) instead of an integer
+# averaged_roll_dice(2, dice)
+from hog import *
+dice = make_test_dice(3, 1, 5, 6)
+averaged_roll_dice = make_averaged(roll_dice, 1000)
+print(averaged_roll_dice(2, dice))
